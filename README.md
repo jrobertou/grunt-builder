@@ -1,6 +1,6 @@
 # grunt-builder
 
-> )
+> Grunt plugin for build app with index.html main development file 
 
 ## Getting Started
 This plugin requires Grunt `~0.4.1`
