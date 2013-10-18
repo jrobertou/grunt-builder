@@ -53,7 +53,6 @@ grunt.initConfig({
       src: //indicate base file (index.html),
       options: {
         //builder options
-        appcache: true //need it for generate the manifest cache file
       }
     }
   },
