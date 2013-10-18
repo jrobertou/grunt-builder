@@ -1,6 +1,30 @@
 # grunt-builder
 
-> Grunt plugin for build app with index.html main development file 
+> Grunt plugin allowing to build js and css app files with index.html main development file. It uses Uglify.js for minification.
+
+> Example with index.html development file :
+```html
+<!DOCTYPE html>
+<html manifest="manifest.appcache">
+  <head>
+    <link href="font.css" rel="stylesheet" data-bundle="app.css">
+    <link href="app.css" rel="stylesheet" data-bundle="app.css">
+  </head>
+  <body>
+    <script type="text/javascript" src="backbone.min.js" data-bundle="vendors.js"></script>
+    <script type="text/javascript" src="underscore.min.js" data-bundle="vendors.js"></script>
+    <script type="text/javascript" src="models.js" data-bundle="app.min.js" data-minify="true"></script>
+    <script type="text/javascript" src="router.js" data-bundle="app.min.js" data-minify="true"></script>
+    <script type="text/javascript" src="views.js" data-bundle="app.min.js" data-minify="true"></script>
+  </body>
+</html>
+```
+
+> Files generated : `app.css` `vendors.js` `app.min.js`
+
+> You can also specified to create a manifest.appcache file with js and css files generated.
+
+
 
 ## Getting Started
 This plugin requires Grunt `~0.4.1`
@@ -25,65 +49,70 @@ In your project's Gruntfile, add a section named `builder` to the data object pa
 ```js
 grunt.initConfig({
   builder: {
-    options: {
-      // Task-specific options go here.
-    },
-    your_target: {
-      // Target-specific file lists and/or options go here.
-    },
+    app: {
+      src: //indicate base file (index.html),
+      options: {
+        //builder options
+        appcache: true //need it for generate the manifest cache file
+      }
+    }
   },
-})
+});
 ```
 
 ### Options
 
-#### options.separator
+#### options.directory
 Type: `String`
-Default value: `',  '`
+Default value: `''`
 
-A string value that is used to do something with whatever.
+Specific directory app .
 
-#### options.punctuation
-Type: `String`
-Default value: `'.'`
+#### options.appcache
+Type: `Boolean`
+Default value: `false`
 
-A string value that is used to do something else with whatever else.
+Need to be true for generate the Manisfest cache file.
+
+#### options.appcacheOptions
+Type: `Object`
+Default value: `{}`
+
+Options for manifest cache file (`optionalFiles` `excludeFiles`)
+
 
 ### Usage Examples
 
-#### Default Options
-In this example, the default options are used to do something with whatever. So if the `testing` file has the content `Testing` and the `123` file had the content `1 2 3`, the generated result would be `Testing, 1 2 3.`
+#### Basic Example
 
 ```js
 grunt.initConfig({
   builder: {
-    options: {},
-    files: {
-      'dest/default_options': ['src/testing', 'src/123'],
-    },
+    app: {
+      src: 'index.html'
+    }
   },
-})
+});
 ```
 
-#### Custom Options
-In this example, custom options are used to do something else with whatever else. So if the `testing` file has the content `Testing` and the `123` file had the content `1 2 3`, the generated result in this case would be `Testing: 1 2 3 !!!`
+#### Complete Example
+
+With all Custom Options used
 
 ```js
 grunt.initConfig({
   builder: {
-    options: {
-      separator: ': ',
-      punctuation: ' !!!',
-    },
-    files: {
-      'dest/default_options': ['src/testing', 'src/123'],
-    },
+    app: {
+      src: 'index.html',
+      options: {
+        directory: 'backbone/',//forder app if it different
+        appcache: true,//need it for generate the manifest cache file
+        appcacheOptions: {
+          optionalFiles: ['vendor/fonts.min.css'],//add specifics no build files in manifest.appcache                 
+          excludeFiles: ['vendors.js']//exclude specifics build files in manifest.appcache
+        }
+      }
+    }
   },
-})
+});
 ```
-
-## Contributing
-In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using [Grunt](http://gruntjs.com/).
-
-## Release History
-_(Nothing yet)_
