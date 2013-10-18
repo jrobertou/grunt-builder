@@ -22,8 +22,8 @@ module.exports = function(grunt) {
     grunt.registerMultiTask('builder', 'Build app with index.html main development file', function() {
     // Merge task-specific and/or target-specific options with these defaults.
     var options = this.options();
-    var src = this.data.src,
-      dest = options.dirDest ? options.dirDest : '',
+    var dir = options.directory ? options.directory : '',
+      src = dir + this.data.src,      
       appcacheOptions = this.data.appcacheOptions;
 
     var file = src;
@@ -53,13 +53,13 @@ module.exports = function(grunt) {
        * Process CSS files
        */
       for (var i in css) {
-        var distFile = dest + i;
+        var distFile = dir + i;
         console.log('Generating CSS file [' + distFile + ']');
         source_files.push(i);
 
         var source = '';
         for (var s in css[i])
-          source += fs.readFileSync(dest + css[i][s], 'utf8');
+          source += fs.readFileSync(dir + css[i][s], 'utf8');
 
         var minimizedCSS = CleanCSS.process(source);
 
@@ -79,7 +79,7 @@ module.exports = function(grunt) {
        */
 
       for (var i in javascripts) {
-        var distFile = dest+i;
+        var distFile = dir+i;
         console.log('Generating JS file [' + distFile + ']');
         source_files.push(i);
 
@@ -87,16 +87,16 @@ module.exports = function(grunt) {
         if (allFilesMinified(javascripts[i])) {
           var filesToMinify = [];
           for (j in javascripts[i]) {
-            filesToMinify.push(dest + javascripts[i][j].src);
+            filesToMinify.push(dir + javascripts[i][j].src);
           }
           content = UglifyJS.minify(filesToMinify).code
         }
         else {
           for (var j in javascripts[i]) {
             if (javascripts[i][j].minify)
-              content += '\n' +  UglifyJS.minify(dest+javascripts[i][j].src).code + '\n';
+              content += '\n' +  UglifyJS.minify(dir+javascripts[i][j].src).code + '\n';
             else
-              content += '\n' + fs.readFileSync(dest+javascripts[i][j].src, 'utf8') + '\n';
+              content += '\n' + fs.readFileSync(dir+javascripts[i][j].src, 'utf8') + '\n';
           }
         }
         dirFileExist(distFile);
@@ -108,7 +108,7 @@ module.exports = function(grunt) {
        */
 
       if (options.appcache){
-        console.log('Generating manifest file [' + dest + 'manifest.appcache' + ']');
+        console.log('Generating manifest file [' + dir + 'manifest.appcache' + ']');
 
         if(options.appcacheOptions) {
           if(options.appcacheOptions.optionalFiles) {
@@ -132,7 +132,7 @@ module.exports = function(grunt) {
         manifest = manifest.replace('_SOURCE_FILES_', source_files.join('\n'));
 
         dirFileExist(distFile);
-        fs.writeFileSync(dest + 'manifest.appcache', manifest);
+        fs.writeFileSync(dir + 'manifest.appcache', manifest);
       }
     }
 
