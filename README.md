@@ -21,7 +21,7 @@ Example with index.html development file :
 ```
 
 > Files generated : `app.css` `vendors.js` `app.min.js`
-
+ 
 > You can also specified to create a manifest.appcache file with js and css files generated.
 
 
