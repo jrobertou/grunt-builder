@@ -2,7 +2,7 @@
 
 > Grunt plugin allowing to build js and css app files with index.html main development file. It uses Uglify.js for minification.
 
-> Example with index.html development file :
+Example with index.html development file :
 ```html
 <!DOCTYPE html>
 <html manifest="manifest.appcache">
