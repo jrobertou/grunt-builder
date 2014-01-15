@@ -61,7 +61,7 @@ module.exports = function(grunt) {
         for (var s in css[i])
           source += fs.readFileSync(dir + css[i][s], 'utf8');
 
-        var minimizedCSS = CleanCSS.process(source);
+        var minimizedCSS = new CleanCSS().minify(source);
 
         dirFileExist(distFile);
         fs.writeFileSync(distFile, minimizedCSS);
